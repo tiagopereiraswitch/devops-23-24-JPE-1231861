@@ -26,21 +26,38 @@ import javax.persistence.Id;
  */
 // tag::code[]
 @Entity // <1>
-public class Employee {
+public class Employee{
 
 	private @Id @GeneratedValue Long id; // <2>
 	private String firstName;
 	private String lastName;
 	private String description;
-	private int jobYears;
+	private String jobTitle;
 
-	private Employee() {}
+	public Employee() {}
 
-	public Employee(String firstName, String lastName, String description, int jobYears) {
+	public Employee(String firstName, String lastName, String description, String jobTitle) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.description = description;
-		this.jobYears = jobYears;
+		this.jobTitle = jobTitle;
+
+		if (!validateArguments(firstName, lastName, description, jobTitle)) {
+			throw new IllegalArgumentException("Invalid arguments");
+		}
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.description = description;
+		this.jobTitle = jobTitle;
+
+	}
+
+	public boolean validateArguments(String firstName, String lastName, String description, String jobTitle) {
+		if (firstName == null || firstName.trim().isEmpty()) return false;
+		if (lastName == null || lastName.trim().isEmpty()) return false;
+		if (description == null || description.trim().isEmpty()) return false;
+		if (jobTitle == null || jobTitle.trim().isEmpty()) return false;
+		return true;
 	}
 
 	@Override
@@ -52,15 +69,14 @@ public class Employee {
 			Objects.equals(firstName, employee.firstName) &&
 			Objects.equals(lastName, employee.lastName) &&
 			Objects.equals(description, employee.description) &&
-				jobYears == employee.jobYears;
-
+			Objects.equals(jobTitle, employee.jobTitle);
 
 	}
 
 	@Override
 	public int hashCode() {
 
-		return Objects.hash(id, firstName, lastName, description, jobYears);
+		return Objects.hash(id, firstName, lastName, description, jobTitle);
 	}
 
 	public Long getId() {
@@ -83,22 +99,17 @@ public class Employee {
 		return lastName;
 	}
 
-	public int getJobYears() {
-		return jobYears;
+
+	public String getJobTitle() {
+		return jobTitle;
 	}
 
-	public void setJobYears(int jobYears) {
-		if (jobYears < 0)
-			throw new IllegalArgumentException("Job years cannot be negative");
-		this.jobYears = jobYears;
+	public void setJobTitle(String jobTitle) {
+		this.jobTitle = jobTitle;
 	}
 
 	public void setLastName(String lastName) {
-		if (lastName == null || lastName.trim().isEmpty())
-			throw new IllegalArgumentException("Last name cannot be null or empty");
-		{
-			this.lastName = lastName;
-		}
+		this.lastName = lastName;
 	}
 
 	public String getDescription() {
@@ -106,8 +117,6 @@ public class Employee {
 	}
 
 	public void setDescription(String description) {
-		if (description == null || description.trim().isEmpty())
-			throw new IllegalArgumentException("Description cannot be null or empty");
 		this.description = description;
 	}
 
@@ -118,7 +127,7 @@ public class Employee {
 			", firstName='" + firstName + '\'' +
 			", lastName='" + lastName + '\'' +
 			", description='" + description + '\'' +
-			", jobYears='" + jobYears + '\'' +
+			", jobTitle='" + jobTitle + '\'' +
 			'}';
 	}
 }

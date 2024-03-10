@@ -1,48 +1,82 @@
 package com.greglturnquist.payroll;
 
 
-import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class EmployeeTest {
-
     @Test
-
-    public void testEmployeeNotNull() {
-        // Arrange + Act
-        Employee employee = new Employee("Bilbo", "Baggins", "ring bearer", 50);
-        // Assert
-        assertNotNull(employee.getFirstName());
-        assertNotNull(employee.getLastName());
-        assertNotNull(employee.getDescription());
-        assertNotNull(employee.getJobYears());
+    void testEmployeeCreation() {
+        Employee employee = new Employee("Dave", "Davidson", "Description", "Daveloper");
+        assertNotNull(employee);
+        assertEquals("Dave", employee.getFirstName());
+        assertEquals("Davidson", employee.getLastName());
+        assertEquals("Description", employee.getDescription());
+        assertEquals("Daveloper", employee.getJobTitle());
     }
 
     @Test
-    public void testEmployeeSetNamesDescJobYears() {
-        // Arrange + Act
-        Employee employee = new Employee("Bilbo", "Baggins", "ring bearer", 50);
-        employee.setFirstName("Frodo");
-        employee.setLastName("Fernandes");
-        employee.setDescription("Unemployed");
-        employee.setJobYears(0);
-        // Assert
-        assertEquals("Frodo", employee.getFirstName());
-        assertEquals("Fernandes", employee.getLastName());
-        assertEquals("Unemployed", employee.getDescription());
-        assertEquals(0, employee.getJobYears());
+    void testExceptionThrownWhenCreatingEmployeeWithNullArguments() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Employee(null, "Davidson", "Description", "Daveloper");
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Employee("Dave", null, "Description", "Daveloper");
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Employee("Dave", "Davidson", null, "Daveloper");
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Employee("Dave", "Davidson", "Description", null);
+        });
     }
 
     @Test
-    public void testEmployeeId() {
-        // Arrange + Act
-        Employee employee = new Employee("Bilbo", "Baggins", "ring bearer", 50);
-
-        // Assert
-        employee.setId(4L);
-        assertEquals(4L, employee.getId().longValue());
+    void testEmployeeValidation() {
+        Employee employee = new Employee();
+        assertFalse(employee.validateArguments(null, "Davidson", "Description", "Daveloper"));
+        assertFalse(employee.validateArguments("Dave", null, "Description", "Daveloper"));
+        assertFalse(employee.validateArguments("Dave", "Davidson", null, "Daveloper"));
+        assertFalse(employee.validateArguments("Dave", "Davidson", "Description", null));
+        assertTrue(employee.validateArguments("Dave", "Davidson", "Description", "Daveloper"));
     }
 
+    @Test
+    void testEmployeeEquality() {
+        Employee employee1 = new Employee("Dave", "Davidson", "Description", "Daveloper");
+        Employee employee2 = new Employee("Dave", "Davidson", "Description", "Daveloper");
+        assertEquals(employee1, employee2);
+    }
+
+    @Test
+    void testEmployeeToString() {
+        Employee employee = new Employee("Dave", "Davidson", "Description", "Daveloper");
+        String expectedString = "Employee{id=null, firstName='Dave', lastName='Davidson', description='Description', jobTitle='Daveloper'}";
+        assertEquals(expectedString, employee.toString());
+    }
+
+    @Test
+    void testEmployeeSettersAndGetters() {
+        Employee employee = new Employee();
+        employee.setId(1L);
+        employee.setFirstName("Dave");
+        employee.setLastName("Davidson");
+        employee.setDescription("Description");
+        employee.setJobTitle("Daveloper");
+        assertEquals(1L, employee.getId());
+        assertEquals("Dave", employee.getFirstName());
+        assertEquals("Davidson", employee.getLastName());
+        assertEquals("Description", employee.getDescription());
+        assertEquals("Daveloper", employee.getJobTitle());
+    }
+
+    @Test
+    void testEmployeeHashCode() {
+        Employee employee1 = new Employee("Dave", "Davidson", "Description", "Daveloper");
+        Employee employee2 = new Employee("Dave", "Davidson", "Description", "Daveloper");
+        assertEquals(employee1.hashCode(), employee2.hashCode());
+    }
 }
+ 
+
