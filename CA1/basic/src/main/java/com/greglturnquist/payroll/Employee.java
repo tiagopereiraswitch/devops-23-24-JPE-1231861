@@ -26,109 +26,127 @@ import javax.persistence.Id;
  */
 // tag::code[]
 @Entity // <1>
-public class Employee{
+public class Employee {
 
-	private @Id @GeneratedValue Long id; // <2>
-	private String firstName;
-	private String lastName;
-	private String description;
-	private String jobTitle;
+    private @Id
+    @GeneratedValue Long id; // <2>
+    private String firstName;
+    private String lastName;
+    private String description;
+    private String jobTitle;
+    private int jobYears;
 
-	public Employee() {}
+    public Employee() {
+    }
 
-	public Employee(String firstName, String lastName, String description, String jobTitle) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.description = description;
-		this.jobTitle = jobTitle;
+    public Employee(String firstName, String lastName, String description, String jobTitle, int jobYears) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.description = description;
+        this.jobTitle = jobTitle;
+        this.jobYears = jobYears;
 
-		if (!validateArguments(firstName, lastName, description, jobTitle)) {
-			throw new IllegalArgumentException("Invalid arguments");
-		}
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.description = description;
-		this.jobTitle = jobTitle;
+        if (!validateArguments(firstName, lastName, description, jobTitle, jobYears)) {
+            throw new IllegalArgumentException("Invalid arguments");
+        }
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.description = description;
+        this.jobTitle = jobTitle;
+        this.jobYears = jobYears;
 
-	}
+    }
 
-	public boolean validateArguments(String firstName, String lastName, String description, String jobTitle) {
-		if (firstName == null || firstName.trim().isEmpty()) return false;
-		if (lastName == null || lastName.trim().isEmpty()) return false;
-		if (description == null || description.trim().isEmpty()) return false;
-		if (jobTitle == null || jobTitle.trim().isEmpty()) return false;
-		return true;
-	}
+    public boolean validateArguments(String firstName, String lastName, String description, String jobTitle, int jobYears ) {
+        if (firstName == null || firstName.trim().isEmpty()) return false;
+        if (lastName == null || lastName.trim().isEmpty()) return false;
+        if (description == null || description.trim().isEmpty()) return false;
+        if (jobTitle == null || jobTitle.trim().isEmpty()) return false;
+        if (jobYears < 0) return false;
+        return true;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Employee employee = (Employee) o;
-		return Objects.equals(id, employee.id) &&
-			Objects.equals(firstName, employee.firstName) &&
-			Objects.equals(lastName, employee.lastName) &&
-			Objects.equals(description, employee.description) &&
-			Objects.equals(jobTitle, employee.jobTitle);
-
-	}
-
-	@Override
-	public int hashCode() {
-
-		return Objects.hash(id, firstName, lastName, description, jobTitle);
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return Objects.equals(id, employee.id) &&
+                Objects.equals(firstName, employee.firstName) &&
+                Objects.equals(lastName, employee.lastName) &&
+                Objects.equals(description, employee.description) &&
+                Objects.equals(jobTitle, employee.jobTitle) &&
+        Objects.equals(jobYears, employee.jobYears);
 
 
-	public String getJobTitle() {
-		return jobTitle;
-	}
+    }
 
-	public void setJobTitle(String jobTitle) {
-		this.jobTitle = jobTitle;
-	}
+    @Override
+    public int hashCode() {
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+        return Objects.hash(id, firstName, lastName, description, jobTitle, jobYears);
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	@Override
-	public String toString() {
-		return "Employee{" +
-			"id=" + id +
-			", firstName='" + firstName + '\'' +
-			", lastName='" + lastName + '\'' +
-			", description='" + description + '\'' +
-			", jobTitle='" + jobTitle + '\'' +
-			'}';
-	}
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+
+    public String getJobTitle() {
+        return jobTitle;
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
+    }
+
+    public int getJobYears() {
+        return jobYears;
+    }
+
+    public void setJobYears(int jobYears) {
+        this.jobYears = jobYears;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", description='" + description + '\'' +
+                ", jobTitle='" + jobTitle + '\'' +
+                ", jobYears='" + jobYears + '\'' +
+                '}';
+    }
 }
 // end::code[]
