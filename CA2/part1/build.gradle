@@ -21,12 +21,13 @@ configurations {
     extraLibs
 }
 
-dependencies {
-    // Use Apache Log4J for logging
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.2'
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.2'
-    testImplementation 'junit:junit:4.12'
-}
+    dependencies {
+        // Use Apache Log4J for logging
+        implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.2'
+        implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.2'
+        testImplementation 'junit:junit:4.12'
+    }
+
 
 
 // Define the main class for the application
@@ -79,9 +80,11 @@ task zipSource(type:Zip) {
     group = "DevOps"
     description = "The source code gets zipped into a zip file"
 
-    from '/src'
+    from 'src'
     archiveBaseName.set("source")
     archiveExtension.set("zip")
+
+    into 'backup'
 
 
 }
