@@ -33,3 +33,17 @@ frontend {
 	cleanScript = "run clean"
 	checkScript = "run check"
 }
+task copyJar(type: Copy) {
+	dependsOn build
+
+	from "$buildDir/libs"
+	into "$projectDir/dist"
+
+	include ".jar"
+}
+
+task deleteFiles(type: Delete) {
+	delete fileTree(dir: 'src/main/resources/static/built', include: '**/')
+}
+
+clean.dependsOn(deleteFiles)
