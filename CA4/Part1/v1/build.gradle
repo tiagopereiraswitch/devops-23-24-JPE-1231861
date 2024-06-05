@@ -21,13 +21,12 @@ configurations {
     extraLibs
 }
 
-    dependencies {
-        // Use Apache Log4J for logging
-        implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.2'
-        implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.2'
-        testImplementation 'junit:junit:4.12'
-    }
-
+dependencies {
+    // Use Apache Log4J for logging
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.2'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.2'
+    testImplementation 'junit:junit:4.12'
+}
 
 
 // Define the main class for the application
@@ -50,41 +49,39 @@ jar {
 
 task runClient(type: JavaExec, dependsOn: classes) {
     group = "DevOps"
-    description = "Launches a chat client that connects to a server on localhost:59001 "
+    description = "Launches a chat client that connects to a server on localhost:8080 "
 
     classpath = sourceSets.main.runtimeClasspath
 
     mainClass = 'basic_demo.ChatClientApp'
 
-    args 'localhost', '59001'
+    args 'localhost', '8080'
 }
 
 task runServer(type: JavaExec, dependsOn: classes) {
     group = "DevOps"
-    description = "Launches a chat client that listens to a client on localhost:59001 "
+    description = "Launches a chat server that listens on port 8080"
 
     classpath = sourceSets.main.runtimeClasspath
 
     mainClass = 'basic_demo.ChatServerApp'
 
-    args '59001'
+    args '8080'
 }
-task backupSource(type:Copy){
+
+task copySource(type: Copy){
     group = "DevOps"
-    description = "The source code is copied into the backup directory"
+    description = "Copies source files to a backup directory"
 
-    from '/src'
-    into '/backup'
-}
-task zipSource(type:Zip) {
-    group = "DevOps"
-    description = "The source code gets zipped into a zip file"
-
-    from 'src'
-    archiveBaseName.set("source")
-    archiveExtension.set("zip")
-
+    from 'src/'
     into 'backup'
+}
 
+task zip(type: Zip){
+    group = "DevOps"
+    description = "Zips the source files"
 
+    from 'src/'
+    archiveFileName = 'source.zip'
+    getArchiveFile().set(layout.buildDirectory.file('backup/source.zip'))
 }
